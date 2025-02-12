@@ -1,0 +1,39 @@
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    int digitSum(int num) {
+        int sum = 0;
+        while (num > 0) {
+            sum += num % 10;
+            num /= 10;
+        }
+        return sum;
+    }
+
+    int maximumSum(vector<int>& nums) {
+        unordered_map<int, vector<int>> groups;
+        int maxSum = -1;
+
+        // Group numbers by their digit sum
+        for (int num : nums) {
+            int sum = digitSum(num);
+            groups[sum].push_back(num);
+        }
+
+        // Find max sum from pairs within each group
+        for (auto& [key, values] : groups) {
+            if (values.size() > 1) {
+                // Sort in descending order
+                sort(values.begin(), values.end(), greater<int>());
+                maxSum = max(maxSum, values[0] + values[1]);
+            }
+        }
+
+        return maxSum;
+    }
+};
